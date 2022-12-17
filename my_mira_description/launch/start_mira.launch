@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <!-- spawn a simulation in Gazebo -->
+    <include file="$(find my_mira_description)/launch/spawn_mira.launch"/>
+    <!-- configurations of controllers -->
+    <include file="$(find my_mira_description)/launch/mira_controllers.launch"/>
+</launch>

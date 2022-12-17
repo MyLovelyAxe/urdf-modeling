@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<robot name="gurdy">
+
+<!-- definitions of materials -->
+<!-- red1 is for ball-foot -->
+    <material name="red1">
+        <color rgba="0.6 0 0 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 0.6 0 1"/>
+    </material>
+
+    <material name="blue">
+        <color rgba="0 0 0.6 1"/>
+    </material>
+<!-- red2 is for head and lowerlegs -->
+    <material name="red2">
+        <color rgba="1 0 0 0.5"/>
+    </material>
+
+    <material name="grey">
+        <color rgba="0.7 0.7 0.7 1"/>
+    </material>
+
+<!-- definitions of links and joints -->
+
+<!-- base_link -->
+
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 0.01" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+    </link>
+
+<!-- head_link -->
+
+    <link name="head_link">
+        <visual>
+            <origin xyz="0 0 0.02" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <material name="red2"/>
+        </visual>
+    </link>
+
+<!-- base_joint -->
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="head_link"/>
+        <origin xyz="0 0 0" rpy="0 -0 0"/>
+    </joint>
+
+<!-- 1st leg -->
+<!-- upperleg_M1_yaw_link -->
+
+    <link name="upperleg_M1_yaw_link">
+        <visual>
+            <!-- tag <origin> in <link> defines the initial center of gravity of current object -->
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.008" length="0.008"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM1_yaw_joint -->
+
+    <joint name="head_upperlegM1_yaw_joint" type="revolute">
+    	<parent link="head_link"/>
+    	<child link="upperleg_M1_yaw_link"/>
+        <!-- tag <origin> in <joint> defines the coordinate of joint between CoG of two links -->
+        <origin xyz="-0.02165 -0.0125 -0.008" rpy="0 0 0"/>
+        <limit lower="-0.7" upper="0.7" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 0 1"/>
+	</joint>
+
+<!-- upperleg_M1_link -->
+
+    <link name="upperleg_M1_link">
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0025"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM1_joint -->
+
+    <joint name="head_upperlegM1_joint" type="revolute">
+    	<parent link="upperleg_M1_yaw_link"/>
+        <!-- the positive direction of child-link is defaultly the same with parent-link -->
+    	<child link="upperleg_M1_link"/>
+        <origin xyz="0 0 0" rpy="3.14159 0 0.523599"/>
+        <limit lower="-1.55" upper="0" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+	</joint>
+
+<!-- lowerleg_M1_link -->
+
+    <link name="lowerleg_M1_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0015"/>
+            </geometry>
+            <material name="red2"/>
+        </visual>
+    </link>
+
+<!-- upperleg_lowerleg_M1_joint -->
+
+    <joint name="upperleg_lowerleg_M1_joint" type="revolute">
+        <parent link="upperleg_M1_link"/>
+        <child link="lowerleg_M1_link"/>
+        <origin xyz="0 0.0095 0.06" rpy="0 0 3.14159"/>
+        <limit lower="-2.9" upper="1.57" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+<!-- foot_M1_link -->
+
+    <link name="foot_M1_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <sphere radius="0.008"/>
+            </geometry>
+            <material name="red1"/>
+        </visual>
+    </link>
+
+<!-- foot_lowerleg_M1_joint -->
+
+    <joint name="foot_lowerleg_M1_joint" type="fixed">
+        <parent link="lowerleg_M1_link"/>
+        <child link="foot_M1_link"/>
+        <origin xyz="0 0 0.06" rpy="0 0 0"/>
+    </joint>
+
+<!-- 2nd leg -->
+<!-- upperleg_M2_yaw_link -->
+
+    <link name="upperleg_M2_yaw_link">
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.008" length="0.008"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM2_yaw_joint -->
+
+    <joint name="head_upperlegM2_yaw_joint" type="revolute">
+    	<parent link="head_link"/>
+    	<child link="upperleg_M2_yaw_link"/>
+        <origin xyz="0.02165 -0.0125 -0.008" rpy="0 0 0"/>
+        <limit lower="-0.7" upper="0.7" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 0 1"/>
+	</joint>
+
+<!-- upperleg_M2_link -->
+
+    <link name="upperleg_M2_link">
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0025"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM2_joint -->
+
+    <joint name="head_upperlegM2_joint" type="revolute">
+    	<parent link="upperleg_M2_yaw_link"/>
+    	<child link="upperleg_M2_link"/>
+        <origin xyz="0 0 0" rpy="3.14159 0 2.61799"/>
+        <limit lower="-1.55" upper="0" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+	</joint>
+
+<!-- lowerleg_M2_link -->
+
+    <link name="lowerleg_M2_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0015"/>
+            </geometry>
+            <material name="red2"/>
+        </visual>
+    </link>
+
+<!-- upperleg_lowerleg_M2_joint -->
+
+    <joint name="upperleg_lowerleg_M2_joint" type="revolute">
+        <parent link="upperleg_M2_link"/>
+        <child link="lowerleg_M2_link"/>
+        <origin xyz="0 0.0095 0.06" rpy="0 0 3.14159"/>
+        <limit lower="-2.9" upper="1.57" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+<!-- foot_M2_link -->
+
+    <link name="foot_M2_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <sphere radius="0.008"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+    </link>
+
+<!-- foot_lowerleg_M2_joint -->
+
+    <joint name="foot_lowerleg_M2_joint" type="fixed">
+        <parent link="lowerleg_M2_link"/>
+        <child link="foot_M2_link"/>
+        <origin xyz="0 0 0.06" rpy="0 0 0"/>
+    </joint>
+
+<!-- 3rd leg -->
+<!-- upperleg_M3_yaw_link -->
+
+    <link name="upperleg_M3_yaw_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder length="0.008" radius="0.008"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM3_yaw_joint -->
+
+    <joint name="head_upperlegM3_yaw_joint" type="revolute">
+        <parent link="head_link"/>
+        <child link="upperleg_M3_yaw_link"/>
+        <origin xyz="0 0.025 -0.008" rpy="0 0 0"/> 
+        <limit lower="-0.7" upper="0.7" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 0 1"/>        
+    </joint>    
+
+<!-- upperleg_M3_link -->
+
+    <link name="upperleg_M3_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0025"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+    </link>
+
+<!-- head_upperlegM3_joint -->
+
+    <joint name="head_upperlegM3_joint" type="revolute">
+        <parent link="upperleg_M3_yaw_link"/>
+        <child link="upperleg_M3_link"/>
+        <origin xyz="0 0 0" rpy="3.14159 0 -1.57"/>
+        <limit lower="-1.55" upper="0" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+<!-- lowerleg_M3_link -->
+
+    <link name="lowerleg_M3_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.03"/>
+            <geometry>
+                <cylinder length="0.06" radius="0.0015"/>
+            </geometry>
+            <material name="red2"/>
+        </visual>
+    </link>
+
+<!-- upperleg_lowerleg_M3_joint -->
+
+    <joint name="upperleg_lowerleg_M3_joint" type="revolute">
+        <parent link="upperleg_M3_link"/>
+        <child link="lowerleg_M3_link"/>
+        <origin xyz="0 0.0095 0.06" rpy="0 0 3.14159"/>
+        <limit lower="-2.9" upper="1.57" effort="1.0" velocity="0.005"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+<!-- foot_M3_link -->
+
+    <link name="foot_M3_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <sphere radius="0.008"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+<!-- foot_lowerleg_M3_joint -->
+
+    <joint name="foot_lowerleg_M3_joint" type="fixed">
+        <parent link="lowerleg_M3_link"/>
+        <child link="foot_M3_link"/>
+        <origin xyz="0 0 0.06" rpy="0 0 0"/>
+    </joint>
+
+</robot>

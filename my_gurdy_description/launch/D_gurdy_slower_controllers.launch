@@ -1,0 +1,16 @@
+<launch>
+
+    <rosparam file="$(find my_gurdy_description)/config/gurdy_slower_controllers.yaml" command="load"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/gurdy" 
+    args="1_1_joint_position_controller 1_2_joint_position_controller 1_3_joint_position_controller 
+    2_1_joint_position_controller 2_2_joint_position_controller 2_3_joint_position_controller 
+    3_1_joint_position_controller 3_2_joint_position_controller 3_3_joint_position_controller 
+    joint_state_controller"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" 
+    respawn="false" output="screen">
+        <remap from="/joint_states" to="/gurdy/joint_states" />
+    </node>
+
+</launch>

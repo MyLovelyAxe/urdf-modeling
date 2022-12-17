@@ -1,0 +1,14 @@
+<launch>
+
+  <!-- USE: roslaunch my_gurdy_description C_gurdy_withcontrol_rviz.launch model:='$(find my_gurdy_description)/urdf/C_gurdy_controllers.urdf' -->
+  <arg name="model" default=""/>
+
+
+  <param name="robot_description" command="cat $(arg model)" />
+
+  <!-- Show in Rviz   -->
+  <!-- run my own rviz config. -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_mira_description)/rviz_config/mira.rviz"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args=""/> -->
+
+</launch>

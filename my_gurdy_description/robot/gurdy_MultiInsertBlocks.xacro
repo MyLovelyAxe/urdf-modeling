@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gurdy">
+
+<!-- define base_link and head_link -->
+
+    <xacro:macro name="gurdy_head" params="">
+
+        <link name="base_link">
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.01 0.01 0.01"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 0.01" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.01 0.01 0.01"/>
+                </geometry>
+            </visual>
+        </link>
+
+        <link name="head_link">
+            <inertial>
+                <origin xyz="0 0 0.02" rpy="0 0 0"/>
+                <mass value="0.01" />
+                <inertia ixx="7.58333333333e-07" ixy="0.0" ixz="0.0" iyy="7.58333333333e-07" iyz="0.0" izz="1.25e-06"/>
+            </inertial>
+            <collision>
+                <origin xyz="0 0 0.02" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.05" length="0.04"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="0.0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://my_gurdy_description/models/gurdy/meshes/gurdy_head_v2.dae"/>
+                </geometry>
+            </visual>
+        </link>
+
+        <gazebo reference="head_link">
+            <mu1>10.0</mu1>
+            <mu2>10.0</mu2>
+        </gazebo>
+
+        <joint name="base_joint" type="fixed">
+            <parent link="base_link"/>
+            <child link="head_link"/>
+            <origin xyz="0 0 0" rpy="0 -0 0"/>
+        </joint>
+
+    </xacro:macro>
+
+<!-- define upperleg_yaw_link -->
+
+    <xacro:macro name="upperleg_yaw_link" params="number">
+
+        <link name="upperleg_M${number}_yaw_link">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="0.01"/>
+                <inertia ixx="2.13333e-07" ixy="0" ixz="0" iyy="2.13333e-07" iyz="0" izz="3.2e-07"/>            
+            </inertial>
+            <collision>
+                <origin rpy="0.0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.008" length="0.008"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="0.0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.008" length="0.008"/>
+                </geometry>
+            </visual>
+        </link>
+        
+    </xacro:macro>
+
+<!-- definition of yaw joint is in definition of gurdy_leg -->
+
+<!-- define transmission of yaw joint -->
+
+    <xacro:macro name="trans_yaw" params="number">
+
+        <transmission name="tran_M${number}_head_upper_yaw">
+
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="head_upperlegM${number}_yaw_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_M${number}_head_upper_yaw">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+
+        </transmission>
+
+    </xacro:macro>
+
+<!-- define upperleg_link -->
+
+    <xacro:macro name="upperleg_link" params="number">
+
+        <link name="upperleg_M${number}_link">
+
+            <inertial>
+                <origin xyz="0 0 0.03" rpy="0 0 0"/>
+                <mass value="0.01"/>
+                <inertia ixx="3.015625e-06" ixy="0" ixz="0" iyy="3.015625e-06" iyz="0" izz="3.125e-08"/>            
+            </inertial>
+
+            <collision>
+                <origin rpy="0.0 0 0" xyz="0 0 0.03"/>
+                <geometry>
+                    <cylinder length="0.06" radius="0.0025"/>
+                </geometry>
+            </collision>
+
+            <visual>
+                <origin rpy="0.0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://my_gurdy_description/models/gurdy/meshes/gurdy_higherleg_v2.dae"/>
+                </geometry>
+            </visual>
+
+        </link>
+
+    </xacro:macro>
+
+<!-- definition of upperleg joint is in definition of gurdy_leg -->
+
+<!-- define transmission of upperleg joint -->
+
+    <xacro:macro name="trans_upperleg" params="number">
+
+        <transmission name="tran_M${number}_head_upper">
+
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="head_upperlegM${number}_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_M${number}_head_upper">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+
+        </transmission>
+
+    </xacro:macro>
+
+<!-- define lowerleg link -->
+
+    <xacro:macro name="lowerleg_link" params="number">
+
+        <link name="lowerleg_M${number}_link">
+
+            <inertial>
+                <origin xyz="0 0 0.03" rpy="0 0 0"/>
+                <mass value="0.01"/>
+                <inertia ixx="3.005625e-06" ixy="0" ixz="0" iyy="3.005625e-06" iyz="0" izz="1.125e-08"/>
+            </inertial>
+
+            <collision>
+                <origin rpy="0 0 0" xyz="0 0 0.03"/>
+                <geometry>
+                    <cylinder length="0.06" radius="0.0015"/>
+                </geometry>
+            </collision>
+
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://my_gurdy_description/models/gurdy/meshes/gurdy_lowerleg_v2.dae"/>
+                </geometry>
+            </visual>
+
+        </link>
+
+    </xacro:macro>
+
+<!-- define lowerleg joint -->
+
+    <xacro:macro name="lowerleg_joint" params="number">
+
+        <joint name="upperleg_lowerleg_M${number}_joint" type="revolute">
+
+            <parent link="upperleg_M${number}_link"/>
+            <child link="lowerleg_M${number}_link"/>
+            <origin xyz="0 0.0095 0.06" rpy="0 0 3.14159"/>
+            <limit lower="-2.9" upper="1.57" effort="1.0" velocity="0.005"/>
+            <axis xyz="0 1 0"/>
+
+        </joint>
+
+        <transmission name="tran_M${number}_upper_lower">
+
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="upperleg_lowerleg_M${number}_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_M${number}_upper_lower">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+
+        </transmission>
+
+    </xacro:macro>
+
+<!-- define foot link -->
+
+    <xacro:macro name="foot_link" params="number color">
+
+        <link name="foot_M${number}_link">
+
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="0.01"/>
+                <inertia ixx="2.56e-07" ixy="0" ixz="0" iyy="2.56e-07" iyz="0" izz="2.56e-07"/>
+            </inertial>
+
+            <collision>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <sphere radius="0.008"/>
+                </geometry>
+            </collision>
+
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <sphere radius="0.008"/>
+                </geometry>
+            </visual>
+
+        </link>
+
+        <gazebo reference="foot_M${number}_link">
+
+            <kp>1000.0</kp>
+            <kd>1000.0</kd>
+            <mu1>10.0</mu1>
+            <mu2>10.0</mu2>
+            <material>Gazebo/${color}</material>
+
+        </gazebo>
+
+        <joint name="foot_lowerleg_M${number}_joint" type="fixed">
+
+            <parent link="lowerleg_M${number}_link"/>
+            <child link="foot_M${number}_link"/>
+            <origin xyz="0 0 0.06" rpy="0 0 0"/>
+
+        </joint>
+
+    </xacro:macro>
+
+<!-- define gurdy_leg -->
+
+    <xacro:macro name="gurdy_leg" params="head_link_name Number Color *origin1 *origin2">  
+    <!-- *upperleg_joint_origin -->
+
+        <!-- apply yaw link -->
+        <xacro:upperleg_yaw_link number="${Number}"/>
+
+        <!-- define yaw joint -->
+        <joint name="head_upperlegM${Number}_yaw_joint" type="revolute">
+            <parent link="${head_link_name}"/>
+            <child link="upperleg_M${Number}_yaw_link"/>
+            <!-- origins of yaw joints are different, so here to individually define, as an insert_block -->
+            <xacro:insert_block name="origin1"/>
+            <limit lower="-0.7" upper="0.7" effort="1.0" velocity="0.005"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <!-- apply transmission of yaw joint -->
+        <xacro:trans_yaw number="${Number}"/>
+
+        <!-- apply upperleg link -->
+        <xacro:upperleg_link number="${Number}"/>
+
+        <!-- define upperleg joint -->
+        <joint name="head_upperlegM${Number}_joint" type="revolute">
+            <parent link="upperleg_M${Number}_yaw_link"/>
+            <child link="upperleg_M${Number}_link"/>
+            <xacro:insert_block name="origin2"/>
+            <limit lower="-1.55" upper="0" effort="1.0" velocity="0.005"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <!-- apply transmission of upperleg joint -->
+        <xacro:trans_upperleg number="${Number}"/>
+
+        <!-- apply lowerleg link -->
+        <xacro:lowerleg_link number="${Number}"/>
+
+        <!-- apply lowerleg joint -->
+        <xacro:lowerleg_joint number="${Number}"/>
+
+        <!-- apply foot link -->
+        <xacro:foot_link number="${Number}" color="${Color}"/>
+
+    </xacro:macro>
+
+<!-- define control system -->
+
+    <xacro:macro name="control_system" params="namespace">
+
+        <gazebo>
+            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+                <robotNamespace>/${namespace}</robotNamespace>
+            </plugin>
+        </gazebo>
+
+        <gazebo>
+
+            <plugin name="gazebo_ros_imu_controller" filename="libgazebo_ros_imu.so">
+            <robotNamespace>/${namespace}</robotNamespace>
+            <topicName>imu/data</topicName>
+            <serviceName>imu/service</serviceName>
+            <bodyName>base_link</bodyName>
+            <gaussianNoise>0</gaussianNoise>
+            <rpyOffsets>0 0 0</rpyOffsets>
+            <updateRate>10.0</updateRate>
+            <alwaysOn>true</alwaysOn>
+            <gaussianNoise>0</gaussianNoise>
+            </plugin>
+
+        </gazebo>
+
+    </xacro:macro>
+
+<!-- apply to integrity -->
+
+<!-- apply base_link and head_link -->
+
+    <xacro:gurdy_head />
+
+<!-- apply gurdy_leg -->
+
+<!-- 1st leg: with yaw link&joint, upperleg link&joint, lowerleg link&joint -->
+
+    <xacro:gurdy_leg head_link_name="head_link" Number="1" Color="Red">
+
+        <origin1>
+            <origin xyz="-0.02165 -0.0125 -0.008" rpy="0 0 0"/>
+        </origin1>
+
+        <origin2>
+            <origin xyz="0 0 0" rpy="3.14159 0 0.523599"/>
+        </origin2>
+
+    </xacro:gurdy_leg>
+
+<!-- 2nd leg: with yaw link&joint, upperleg link&joint, lowerleg link&joint -->
+
+    <!-- <xacro:gurdy_leg head_link_name="head_link" Number="2" Color="Green">
+        <origin xyz="0.02165 -0.0125 -0.008" rpy="0 0 0"/>
+        <uorigin xyz="0 0 0" rpy="3.14159 0 2.61799"/>
+    </xacro:gurdy_leg> -->
+
+<!-- 3rd leg: with yaw link&joint, upperleg link&joint, lowerleg link&joint -->
+
+    <!-- <xacro:gurdy_leg head_link_name="head_link" Number="3" Color="Blue">
+        <origin xyz="0 0.025 -0.008" rpy="0 0 0"/> 
+        <origin xyz="0 0 0" rpy="3.14159 0 -1.57"/>
+    </xacro:gurdy_leg> -->
+
+<!-- apply control system -->
+
+    <xacro:control_system namespace="gurdy"/>
+
+</robot>
